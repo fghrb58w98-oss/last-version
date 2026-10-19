@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10100e">
+    <title>Lucky Lounge — Free Demo Game</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #10100e;
+        color: #f8f3e8;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(ellipse at 50% 0, rgb(173 122 36 / 14%), transparent 42rem),
+          #10100e;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .page {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 82px;
+        border-bottom: 1px solid rgb(255 255 255 / 9%);
+      }
+
+      .brand {
+        color: #f2c56d;
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .demo-label {
+        color: #c8c1b3;
+        font-size: 0.78rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      main {
+        padding: clamp(48px, 8vw, 88px) 0 64px;
+      }
+
+      .intro {
+        max-width: 680px;
+        margin: 0 auto 38px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        color: #f2c56d;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.5rem, 7vw, 4.8rem);
+        font-weight: 500;
+        letter-spacing: -0.045em;
+        line-height: 1;
+      }
+
+      .intro p:last-child {
+        max-width: 480px;
+        margin: 18px auto 0;
+        color: #b9b3a7;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .machine {
+        width: min(100%, 690px);
+        margin: 0 auto;
+        padding: clamp(20px, 5vw, 38px);
+        border: 1px solid #73562b;
+        border-radius: 24px;
+        background: linear-gradient(145deg, #29251e, #1b1a17 58%);
+        box-shadow: 0 24px 80px rgb(0 0 0 / 45%), inset 0 1px rgb(255 255 255 / 8%);
+      }
+
+      .balance-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      .balance-caption,
+      .wager-caption {
+        display: block;
+        margin-bottom: 5px;
+        color: #aaa395;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .balance {
+        color: #f2c56d;
+        font-size: 1.35rem;
+        font-weight: 750;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .wager-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .wager-control button {
+        width: 34px;
+        height: 34px;
+        border: 1px solid #62543a;
+        border-radius: 50%;
+        background: #25221c;
+        color: #f2c56d;
+        cursor: pointer;
+      }
+
+      .wager-control button:disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+      }
+
+      .wager {
+        min-width: 54px;
+        color: #f8f3e8;
+        font-weight: 700;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .reels {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding: 15px;
+        border: 1px solid rgb(242 197 109 / 30%);
+        border-radius: 16px;
+        background: #11110f;
+      }
+
+      .reel {
+        display: grid;
+        min-height: clamp(92px, 18vw, 140px);
+        place-items: center;
+        border: 1px solid rgb(255 255 255 / 9%);
+        border-radius: 10px;
+        background: linear-gradient(180deg, #27251f, #1b1a17);
+        font-size: clamp(2.6rem, 9vw, 4.5rem);
+        line-height: 1;
+      }
+
+      .reel.spinning {
+        animation: pulse 150ms ease-in-out infinite alternate;
+      }
+
+      @keyframes pulse {
+        to {
+          opacity: 0.55;
+          transform: translateY(2px);
+        }
+      }
+
+      .message {
+        min-height: 28px;
+        margin: 18px 0 12px;
+        color: #c8c1b3;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .message.win {
+        color: #f2c56d;
+        font-weight: 700;
+      }
+
+      .spin-button {
+        display: block;
+        width: 100%;
+        min-height: 54px;
+        border: 0;
+        border-radius: 10px;
+        background: linear-gradient(100deg, #d6a344, #f2cd7c);
+        color: #20180b;
+        cursor: pointer;
+        font-weight: 850;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        transition: filter 150ms ease, transform 150ms ease;
+      }
+
+      .spin-button:hover:not(:disabled) {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+      }
+
+      .spin-button:disabled {
+        cursor: wait;
+        opacity: 0.65;
+      }
+
+      button:focus-visible {
+        outline: 3px solid #fff0bf;
+        outline-offset: 3px;
+      }
+
+      .paytable {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        margin: 19px 0 0;
+        color: #aaa395;
+        font-size: 0.78rem;
+      }
+
+      .paytable strong {
+        color: #e2d5b8;
+      }
+
+      .fine-print {
+        max-width: 600px;
+        margin: 24px auto 0;
+        color: #898477;
+        font-size: 0.76rem;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      @media (max-width: 520px) {
+        .page {
+          width: min(100% - 28px, 690px);
+        }
+
+        .topbar {
+          min-height: 68px;
+        }
+
+        .demo-label {
+          font-size: 0.65rem;
+        }
+
+        .machine {
+          padding: 19px 15px;
+          border-radius: 18px;
+        }
+
+        .reels {
+          gap: 8px;
+          padding: 9px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Lucky Lounge home">Lucky Lounge</a>
+        <span class="demo-label">Free play · No real money</span>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <p class="eyebrow">Take a seat</p>
+          <h1 id="page-title">A little luck,<br>just for fun.</h1>
+          <p>Try the lounge slot with complimentary demo points. No account, deposits, or cash prizes—just a quick game.</p>
+        </section>
+
+        <section class="machine" aria-label="Lucky Lounge slot game">
+          <div class="balance-row">
+            <div>
+              <span class="balance-caption">Demo points</span>
+              <output class="balance" id="balance" aria-label="Demo points balance">1000</output>
+            </div>
+            <div>
+              <span class="wager-caption">Play points</span>
+              <div class="wager-control" aria-label="Set play points">
+                <button type="button" id="decrease" aria-label="Decrease play points">−</button>
+                <output class="wager" id="wager">10</output>
+                <button type="button" id="increase" aria-label="Increase play points">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="reels" aria-label="Slot results">
+            <div class="reel" id="reel-1" aria-label="First reel">🍋</div>
+            <div class="reel" id="reel-2" aria-label="Second reel">⭐</div>
+            <div class="reel" id="reel-3" aria-label="Third reel">🍒</div>
+          </div>
+          <p class="message" id="message" role="status" aria-live="polite">Set your points and spin to play.</p>
+          <button class="spin-button" id="spin" type="button">Spin</button>
+          <div class="paytable" aria-label="Demo point prizes">
+            <span><strong>🍒</strong> ×3 = 2×</span>
+            <span><strong>🍋</strong> ×3 = 3×</span>
+            <span><strong>⭐</strong> ×3 = 5×</span>
+            <span><strong>💎</strong> ×3 = 10×</span>
+          </div>
+        </section>
+
+        <p class="fine-print">This is a fictional demo game. Points have no monetary value, cannot be purchased or redeemed, and are reset when you reload the page. Please play responsibly.</p>
+      </main>
+    </div>
+
+    <script>
+      (() => {
+        const symbols = [
+          { emoji: "🍒", weight: 35, multiplier: 2 },
+          { emoji: "🍋", weight: 30, multiplier: 3 },
+          { emoji: "⭐", weight: 23, multiplier: 5 },
+          { emoji: "💎", weight: 12, multiplier: 10 },
+        ];
+        const reels = [1, 2, 3].map((number) => document.getElementById(`reel-${number}`));
+        const balanceOutput = document.getElementById("balance");
+        const wagerOutput = document.getElementById("wager");
+        const message = document.getElementById("message");
+        const spinButton = document.getElementById("spin");
+        const decreaseButton = document.getElementById("decrease");
+        const increaseButton = document.getElementById("increase");
+        const wagerSteps = [10, 20, 50, 100];
+        let balance = 1000;
+        let wagerIndex = 0;
+        let isSpinning = false;
+
+        const updateControls = () => {
+          balanceOutput.textContent = balance.toLocaleString();
+          wagerOutput.textContent = wagerSteps[wagerIndex].toString();
+          decreaseButton.disabled = isSpinning || wagerIndex === 0;
+          increaseButton.disabled = isSpinning || wagerIndex === wagerSteps.length - 1;
+          spinButton.disabled = isSpinning || balance < wagerSteps[wagerIndex];
+        };
+
+        const randomSymbol = () => {
+          let choice = Math.random() * 100;
+          for (const symbol of symbols) {
+            choice -= symbol.weight;
+            if (choice < 0) return symbol;
+          }
+          return symbols[0];
+        };
+
+        const sleep = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+
+        decreaseButton.addEventListener("click", () => {
+          if (!isSpinning && wagerIndex > 0) wagerIndex -= 1;
+          updateControls();
+        });
+
+        increaseButton.addEventListener("click", () => {
+          if (!isSpinning && wagerIndex < wagerSteps.length - 1) wagerIndex += 1;
+          updateControls();
+        });
+
+        spinButton.addEventListener("click", async () => {
+          if (isSpinning) return;
+          const stake = wagerSteps[wagerIndex];
+          if (balance < stake) return;
+
+          isSpinning = true;
+          balance -= stake;
+          message.classList.remove("win");
+          message.textContent = "Spinning…";
+          reels.forEach((reel) => reel.classList.add("spinning"));
+          updateControls();
+
+          const result = [];
+          for (const reel of reels) {
+            await sleep(420);
+            const symbol = randomSymbol();
+            result.push(symbol);
+            reel.textContent = symbol.emoji;
+            reel.setAttribute("aria-label", symbol.emoji);
+          }
+
+          reels.forEach((reel) => reel.classList.remove("spinning"));
+          if (result.every((symbol) => symbol.emoji === result[0].emoji)) {
+            const prize = stake * result[0].multiplier;
+            balance += prize;
+            message.textContent = `Three ${result[0].emoji} — you won ${prize} demo points!`;
+            message.classList.add("win");
+          } else {
+            message.textContent = "No match this time. Give it another spin!";
+          }
+
+          isSpinning = false;
+          updateControls();
+          if (balance < wagerSteps[wagerIndex]) {
+            message.textContent += " Reload the page to restart with 1,000 demo points.";
+          }
+        });
+
+        updateControls();
+      })();
+    </script>
+  </body>
+</html>
